@@ -47,8 +47,8 @@ def IsUniqueMinimizer (Z : Fin 11 → Point) : Prop :=
 
 /-! ## The coordinates of the minimizer -/
 
-/-- A table of eleven points with 15 decimal places, which approximates the minimizer. Its entries
-are exact rational numbers, not floating-point numbers.
+/-- Eleven points with explicit decimal coordinates, which approximate the minimizer. The
+coordinates are exact rational numbers, not floating-point numbers.
 Here `!₂[x, y, z]` is the Euclidean vector with coordinates `(x, y, z)`, and `![x₀, …, x₁₀]` is the
 family with the entries `x₀, …, x₁₀`. -/
 def X₀ : Fin 11 → Point :=
