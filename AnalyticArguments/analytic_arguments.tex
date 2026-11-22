@@ -1,0 +1,375 @@
+\documentclass[reqno,a4paper,11pt]{amsart}
+
+\addtolength{\hoffset}{-0.6cm}
+\addtolength{\textwidth}{1.2cm}
+
+\numberwithin{equation}{section}
+
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage{mathtools}
+\usepackage{hyperref}
+\usepackage{xurl}
+\usepackage{booktabs}
+
+\newtheorem{theorem}{Theorem}[section]
+
+\emergencystretch=2em
+
+\def\R{{\mathbb R}}
+\newcommand{\Sph}{\mathbb{S}}
+\newcommand{\lean}[1]{\texttt{#1}}
+\newcommand{\file}[1]{\nolinkurl{#1}}
+
+% Numbers of the certificates and of the Lean files.
+\newcommand{\factNrgCellsAccepted}{474}
+\newcommand{\factNrgCellsMargin}{6.3 \cdot 10^{-4}}
+\newcommand{\factNrgCoverChecks}{551}
+\newcommand{\factNrgDataCentre}{9.7 \cdot 10^{-8}}
+\newcommand{\factNrgDataTargetVsSource}{1.81 \cdot 10^{-9}}
+\newcommand{\factNrgEnumEntries}{908315}
+\newcommand{\factNrgEnumExcluded}{876581}
+\newcommand{\factNrgEnumFinal}{3}
+\newcommand{\factNrgEnumKept}{31734}
+\newcommand{\factNrgEnumKeptList}{558, 1379, 783, 70 \text{ and } 3}
+\newcommand{\factNrgExcl}{5215}
+\newcommand{\factNrgExclList}{428, 2005, 2384, 392 \text{ and } 6}
+\newcommand{\factNrgInnerNarrowBound}{40.596449961}
+\newcommand{\factNrgInnerNarrowMargin}{4.51 \cdot 10^{-7}}
+\newcommand{\factNrgInnerWideBound}{40.596449785}
+\newcommand{\factNrgInnerWideMargin}{2.75 \cdot 10^{-7}}
+\newcommand{\factNrgLpBound}{40.5000033}
+\newcommand{\factNrgLpBudget}{0.09645}
+\newcommand{\factNrgLpDegree}{9}
+\newcommand{\factNrgLpPieces}{25}
+\newcommand{\factNrgLpTerms}{41}
+\newcommand{\factNrgSaddleSlabs}{86}
+\newcommand{\factNrgUpperBits}{49}
+\newcommand{\factNrgUpperGap}{1.77 \cdot 10^{-9}}
+\newcommand{\factNrlCubAtRadius}{0.0197}
+\newcommand{\factNrlCubBits}{1211}
+\newcommand{\factNrlEncE}{1}
+\newcommand{\factNrlGammaUp}{6.4 \cdot 10^{-18}}
+\newcommand{\factNrlHessBits}{198}
+\newcommand{\factNrlKappaDec}{0.04529}
+\newcommand{\factNrlLibFiles}{11}
+\newcommand{\factNrlLibLines}{2645}
+\newcommand{\factNrlLinkBits}{45}
+\newcommand{\factNrlLinkDiff}{3.2 \cdot 10^{-8}}
+\newcommand{\factNrlNet}{0.026}
+\newcommand{\factNrlNormBits}{59}
+\newcommand{\factNrlRadius}{0.0056}
+\newcommand{\factNrlRefGrad}{1.6 \cdot 10^{-70}}
+\newcommand{\factNrlRho}{0.0105}
+\newcommand{\factNrlRigBits}{129}
+\newcommand{\factNrlRowADen}{512}
+\newcommand{\factNrlRowANum}{2615}
+\newcommand{\factNrlRowBDen}{256}
+\newcommand{\factNrlRowBNum}{1643}
+\newcommand{\factNrlRowCDen}{512}
+\newcommand{\factNrlRowCNum}{5089}
+\newcommand{\factNrlTabNonzero}{9207}
+\newcommand{\factNthAnaFiles}{12}
+\newcommand{\factNthAnaLines}{4005}
+\newcommand{\factNthCoordDiff}{4.95 \cdot 10^{-16}}
+\newcommand{\factNthStmtKernelChecks}{44}
+
+\begin{document}
+
+\title[The Thomson problem for eleven points]{The Thomson problem for eleven points:\\ the arguments of the proof}
+
+\date{November 2026}
+
+\begin{abstract}
+This note accompanies the Lean verification of the Thomson problem for eleven points on the sphere $\Sph^2$. It states the theorem, the statements that the proof takes from its certificates, and the analytic arguments that lead from these statements to the theorem. All of it is verified in Lean; the note names the theorems of Lean that correspond to its statements.
+\end{abstract}
+
+\maketitle
+
+\section{The theorem}\label{sec:theorem}
+
+A \emph{configuration} is a family $x = (x_1, \dots, x_{11})$ of eleven points of $\R^3$. If its points are distinct, then
+$$
+E(x) = \sum_{i<j} \frac{1}{|x_i - x_j|}
+$$
+is its Coulomb energy. The Thomson problem for eleven points asks for the configurations of distinct points of the unit sphere $\Sph^2$ with the least energy. The minimizer of the energy has no closed form. The theorem names it by an explicit configuration nearby: let $X^{\circ}$ be the family of the eleven points of $\R^3$ in Table \ref{tab:xcirc}, with coordinates of $15$ decimal places.
+
+\begin{table}[ht]
+\centering
+\small
+\begin{tabular}{@{}rrrr@{}}
+\toprule
+$i$ & \multicolumn{3}{c}{coordinates of $X^{\circ}_i$} \\
+\midrule
+$1$ & $0.313620689025589$ & $0.319317483958265$ & $0.894247397454238$ \\
+$2$ & $0.122131934022939$ & $-0.879707882375786$ & $0.459562653375714$ \\
+$3$ & $0.836384234608648$ & $0.540732019932700$ & $0.089834819071496$ \\
+$4$ & $-0.829513636587083$ & $-0.542301295299786$ & $-0.133478207330809$ \\
+$5$ & $-0.566960498580477$ & $0.239819275605855$ & $-0.788062502659060$ \\
+$6$ & $0.061432238616290$ & $-0.754530255111397$ & $-0.653383634766071$ \\
+$7$ & $-0.016529763516812$ & $0.987228274258469$ & $-0.158452205483935$ \\
+$8$ & $0.892049358244038$ & $-0.450479658797258$ & $0.036276982596482$ \\
+$9$ & $0.482848954144595$ & $0.189339586942292$ & $-0.854989712393075$ \\
+$10$ & $-0.513162273240149$ & $-0.211638860342633$ & $0.831789320751279$ \\
+$11$ & $-0.786447187737911$ & $0.558000050679941$ & $0.264833465295296$ \\
+\bottomrule
+\end{tabular}
+\medskip
+\caption{The configuration $X^{\circ}$.}\label{tab:xcirc}
+\end{table}
+
+\begin{theorem}[The Thomson problem for $11$ points]\label{thm:thomson11}
+There is a configuration $X^* = (X^*_1, \dots, X^*_{11})$ of distinct points of the unit sphere of $\R^3$ with the following properties.
+\begin{enumerate}
+    \item[(a)] Every coordinate of every point of $X^*$ differs from the same coordinate of $X^{\circ}$ by at most $10^{-10}$.
+    \item[(b)] $40.59644951 < E(X^*) \leq 40.59645051$.
+    \item[(c)] Let $x_1, \dots, x_{11}$ be distinct points of the unit sphere of $\R^3$. Then $E(x) \geq E(X^*)$, and equality holds if and only if there are an orthogonal matrix $U$ and a permutation $\sigma$ of $\{1, \dots, 11\}$ such that $x_i = U X^*_{\sigma(i)}$ for all $i$.
+\end{enumerate}
+\end{theorem}
+
+So the Coulomb energy of eleven points on the sphere has a minimizer, the minimizer is unique up to orthogonal maps and relabelling, and its coordinates are known up to $10^{-10}$. The theorem does not state the symmetry group of the minimizer.
+
+{\sloppy In Lean the theorem is \lean{Thomson11.thomson\_11\_points}. The file \file{Showcase.lean} states it with Mathlib alone: the Euclidean space $\R^3$ with its norm, finite sums, linear isometries and permutations. The file \file{Showcase_WithProofs.lean} contains the same statement with its proof. The library states the theorem with coordinates, as the proposition \lean{N11.Thomson11} of the file \file{LeanCode/N11/Statement.lean}. The theorem \lean{N11.T6A.thomson11} is a proof of this proposition, and \file{Showcase_WithProofs.lean} passes from it to the form of \file{Showcase.lean}. These theorems depend on the three standard axioms \lean{propext}, \lean{Classical.choice} and \lean{Quot.sound} only.\par}
+
+\emph{The structure of the proof.} The proof has a computational part and an analytic part. The computational part consists of seven statements, (G1) to (G7), each of which is established by certificates: finite data, on which the kernel of Lean evaluates a checker whose soundness is a theorem of Lean. Section \ref{sec:n11g} contains the statements (G1) to (G6) and the theorem about configurations that follows from them (Theorem \ref{thm:routeg}). Section \ref{sec:n11glocal} contains statement (G7), on a neighbourhood of the minimizer (Theorem \ref{thm:gseven}). Section \ref{sec:n11full} contains the analytic arguments that lead from Theorems \ref{thm:routeg} and \ref{thm:gseven} to Theorem \ref{thm:thomson11}. Section \ref{sec:lean} lists the parts of the proof in Lean.
+
+\section{The computational statements}\label{sec:n11g}
+
+The proof enumerates the patterns of the inner products of a minimizer: typed three-point bounds of degree $6$ exclude all of them but three, and further bounds confine a configuration of low energy with one of the three patterns to a box around an explicit configuration.
+
+\subsection{The statements}
+
+Let $x = (x_1, \dots, x_{11})$ be a configuration of points of $\Sph^2$, let $t_{ij} = \langle x_i, x_j \rangle$, and let $E(x) = \sum_{i<j} |x_i - x_j|^{-1}$ be its Coulomb energy. We fix the number
+$$
+\tilde E = \tfrac{4059645051}{10^8} = 40.59645051 .
+$$
+Numerically the least energy is $40.5964505082$; it is smaller than $\tilde E$ by $\factNrgDataTargetVsSource$. A configuration is \emph{separated} if its points are distinct and $t_{ij} \leq \tfrac{73}{100}$ for all $i \neq j$.
+
+\emph{Patterns.} Let $\theta = -\tfrac{2}{25}$. A \emph{pattern} on $k$ vertices is a graph $g$ with the vertices $0, \dots, k-1$. Distinct points $y_0, \dots, y_{k-1}$ of a configuration \emph{have the pattern} $g$ if $\langle y_a, y_b \rangle \geq \theta$ for every edge $\{a,b\}$ of $g$ and $\langle y_a, y_b \rangle \leq \theta$ for every other pair. A pair with the inner product $\theta$ satisfies both conditions. Hence any $k$ points have a pattern.
+
+\emph{Cells and boxes.} A \emph{cell} is a family of intervals $I_{ab}$, $0 \leq a < b \leq 10$. A \emph{numbering} of a configuration is a bijection $p$ from $\{0, \dots, 10\}$ onto its points, and the configuration \emph{lies in the cell} with the numbering $p$ if $\langle p(a), p(b) \rangle \in I_{ab}$ for all $a < b$. Let $\tilde X$ denote the configuration that arises from a numerical minimizer of the energy when the stereographic coordinates of its points are rounded to multiples of $2^{-24}$. Its points lie on $\Sph^2$ and have rational coordinates, with denominators of at most $\factNrgUpperBits$ bits. Let $\tau_{ab}$, $a < b$, be the multiples of $2^{-24}$ that the certificates of (G6) contain; they differ from the inner products of $\tilde X$ by at most $\factNrgDataCentre$. For $\delta > 0$ the \emph{box} $B_\delta$ is the cell with the intervals $[\max(\tau_{ab} - \delta, -1), \, \tau_{ab} + \delta]$, whose end points are rounded outwards to four decimal places.
+
+The statements are the following.
+\begin{enumerate}
+    \item[(G1)] The configuration $\tilde X$ is separated, and $E(\tilde X) \leq \tilde E$.
+    \item[(G2)] If the points of $x$ are distinct and $E(x) \leq \tilde E$, then $t_{ij} < \tfrac{73}{100}$ for all $i \neq j$.
+    \item[(G3)] \emph{The exclusions.} For each of $\factNrgExcl$ patterns on $7$ to $11$ vertices: no separated configuration $x$ with $E(x) \leq \tilde E$ has points with this pattern.
+    \item[(G4)] \emph{The enumeration.} The points of a separated configuration $x$ with $E(x) \leq \tilde E$ have, in some numbering, one of $\factNrgEnumFinal$ patterns on eleven vertices.
+    \item[(G5)] \emph{The cells.} If the points of a separated configuration have, in the numbering $p$, one of two of these patterns, then $E(x) > \tilde E$. If they have the third pattern, then $x$ lies in the box $B_{3/20}$ with the numbering $p$, or $E(x) > \tilde E$. If a separated configuration lies in $B_{3/20}$ with a numbering and does not lie in $B_{1/10}$ with the same numbering, then $E(x) > \tilde E$.
+    \item[(G6)] \emph{The inner box.} If a separated configuration $x$ lies in the box $B_\delta$ with the numbering $p$, then
+    \begin{equation}\label{eq:n11pen}
+    E(x) - c \sum_{a<b} \bigl( \langle p(a), p(b) \rangle - \tau_{ab} \bigr)^2 > \tilde E - 10^{-6},
+    \end{equation}
+    for $(\delta, c) = (\tfrac{3}{20}, \tfrac{3}{1000})$ and for $(\delta, c) = (\tfrac{1}{10}, \tfrac{9}{1000})$.
+    \item[(G7)] \emph{The local constants.} Bounds for the terms of the first, second and third order of the energy at a configuration near $\tilde X$. Section \ref{sec:n11glocal} states them, for a polynomial that lies below the energy.
+\end{enumerate}
+
+\begin{theorem}\label{thm:routeg}
+Let $x$ be a configuration of eleven distinct points of $\Sph^2$ with $E(x) \leq \tilde E$. Then $x$ has a numbering $p$ with which it lies in the box $B_{1/10}$, and
+$$
+\tfrac{9}{1000} \sum_{a<b} \bigl( \langle p(a), p(b) \rangle - \tau_{ab} \bigr)^2 < 10^{-6} .
+$$
+The configuration $\tilde X$ consists of eleven distinct points of $\Sph^2$, and $E(\tilde X) \leq \tilde E$.
+\end{theorem}
+
+In Lean these are the theorems \lean{N11RG.routeG} and \lean{N11RG.nonempty} of the generated module \file{Certificates/Route/N11RG.lean}, and Lean reports the three standard axioms for them. The proof is short. By (G2) the configuration is separated. By (G4) its points have one of the three patterns, where the proof of (G4) uses (G3). By (G5) it lies in the box $B_{3/20}$ and then in the box $B_{1/10}$, since its energy is at most $\tilde E$. Then \eqref{eq:n11pen} with $(\delta, c) = (\tfrac{1}{10}, \tfrac{9}{1000})$ and $E(x) \leq \tilde E$ give the inequality. The second part is (G1); it shows that the hypothesis of the theorem is satisfied.
+
+A minimizer $x^*$ of the energy has $E(x^*) \leq E(\tilde X) \leq \tilde E$. Hence Theorem \ref{thm:routeg} confines every minimizer: the sum of the squares is below $\tfrac{1}{9000}$, so that each of its $55$ inner products differs from $\tau_{ab}$ by less than $0.0106$, in a suitable numbering. The theorem does not state that a minimizer exists or that it is unique.
+
+\subsection{The certificates of (G3), (G5) and (G6)}\label{sec:n11gnormal}
+
+A certificate of (G3), (G5) or (G6) is a typed three-point bound of degree $6$ on $\Sph^2$. For (G3) with a pattern on $k$ vertices it has $k$ classes of one point and one class of the $11-k$ other points; for (G5) and (G6) every point is a class. Its rooted forms use the kernels of the circle: $R_0 = 1$, $R_1 = A$ and $R_{k+1} = 2 A R_k - W R_{k-1}$, with $A = t - uv$ and $W = (1-u^2)(1-v^2)$.
+
+The kernel $R_k$ at $A = \langle a, a' \rangle$ and $W = |a|^2 |a'|^2$, for vectors $a, a'$ of the plane, is the real part of $(z \bar w)^k$ for the complex numbers $z$, $w$ of the two vectors. Hence the matrix of $R_k$ at finitely many vectors is positive semidefinite for every $k$, and the proof of this fact in Lean needs no table of harmonic polynomials. With it we obtain the typed three-point bound on the unit sphere of $\R^3$ (\lean{typed\_bound2}) and the theorem of a certificate (\lean{coulomb2\_gt\_rows}): for eleven distinct points of $\Sph^2$ whose classes and inner products lie in the domain of the certificate, the energy exceeds the bound that the checker computes.
+
+A pair type has a pair polynomial $K$ and a polynomial $P$ of degree two. The certificate bounds $\sum K$, and the sign condition is $K + P \leq (2-2t)^{-1/2}$ on the interval of the pair type. For an exclusion and for a cell $P = 0$. For the inner box $P = c\,(t - \tau_{ab})^2$, which yields \eqref{eq:n11pen}.
+
+\subsection{Exclusions and the enumeration}
+
+\emph{(G3).} A check for the kernel (\lean{patOk}) establishes that the domain of a certificate is that of a pattern $g$ on $k$ labelled points: the intervals are $[\theta, \tfrac{73}{100}]$ on the edges of $g$, $[-1, \theta]$ on the other pairs of labelled points and $[-1, \tfrac{73}{100}]$ on the pairs with a further point, and the domain has no further inequalities. Then the theorem of the certificate excludes the pattern: a separated configuration with $k$ points of this pattern is labelled by these points, lies in the domain, and has energy above $\tilde E$. There are $\factNrgExclList$ exclusions on $7$, $8$, $9$, $10$ and $11$ vertices.
+
+\emph{(G4).} The enumeration follows one chain of sets of points of the configuration, from the empty set to all eleven points. For $k \leq 10$ let $F_k$ be a table of patterns on $k$ vertices, the patterns that are \emph{kept}. A step passes from $k$ points with a pattern $g$ of $F_k$ to $k+1$ points: it adds a point of the configuration outside the $k$ points. Let $S$ be the set of the labelled points whose inner product with the new point is at least $\theta$. The $k+1$ points have the extension of $g$ in which the new vertex is joined to the vertices of $S$. A \emph{row} of the level $k$ has one entry for every set $S$. The entry states that the extension is a pattern of $F_{k+1}$ with other labels, or that it contains a pattern that is excluded, and it holds the map of the vertices that shows this. One check serves both kinds: a map embeds one pattern into another (\lean{embOk}). The excluded patterns are those of (G3) and the pattern without edges on five vertices: five points of $\Sph^2$ with pairwise inner products at most $\theta < 0$ do not exist, since five vectors of $\R^3$ with pairwise negative inner products do not exist. The tables have $\factNrgEnumEntries$ entries for the levels $0$ to $10$; $\factNrgEnumKept$ of them keep a pattern and $\factNrgEnumExcluded$ refer to an excluded pattern. For $k \leq 6$ the table $F_k$ contains every graph on $k$ vertices up to isomorphism, and the tables for $k = 7, \dots, 11$ have $\factNrgEnumKeptList$ patterns. The theorem of the step (\lean{step}) is applied eleven times.
+
+The enumeration needs no statement about all subsets of the points and no notion of a minimizer: every extension of a kept pattern has an entry, and the kernel checks an entry by at most $55$ tests of pairs of vertices.
+
+\subsection{Cells, the inner box and the two bounds}
+
+\emph{(G5).} The configurations with a pattern on eleven vertices form the cell of the pattern. Let $c$ be a cell, $b$ a box inside it, and fix an order of the $55$ pairs. For a pair and one of its two sides, the \emph{slab} is the cell in which the pairs before this pair have their intervals of $b$, the pair has the part of its interval of $c$ on this side of $b$, and the other pairs have their intervals of $c$. Every configuration of $c$ lies in $b$ or in a slab: consider a pair outside the box with the least position (\lean{peel\_cover}). The cells of the certificates are not exactly these slabs, since the box and the slabs were rounded outwards separately. The checks for the kernel are therefore containments of cells, $\factNrgCoverChecks$ in all. For the pattern of the minimizer the box is $B_{3/20}$; one of its slabs has a bound below $\tilde E$ and is covered by two halves, one of which is covered by a box and slabs again. For each of the two other patterns a box and $\factNrgSaddleSlabs$ slabs have bounds above $\tilde E$. A further cover treats the shell between $B_{3/20}$ and $B_{1/10}$. In all, $\factNrgCellsAccepted$ cells have a certificate that exceeds $\tilde E$; the smallest margin of a cell is $\factNrgCellsMargin$.
+
+\emph{(G6).} A check establishes that the polynomial $P$ of every pair type is $c \, (t - \tau_{ab})^2$ with the numbers $\tau_{ab}$ of a table (\lean{pensAre}). The exact bounds of the two certificates are $\factNrgInnerWideBound$ for $B_{3/20}$ and $\factNrgInnerNarrowBound$ for $B_{1/10}$; they exceed $\tilde E - 10^{-6}$ by $\factNrgInnerWideMargin$ and $\factNrgInnerNarrowMargin$.
+
+\emph{(G1).} For every pair of points of $\tilde X$ the kernel tests, in integers, a lower bound $r/2^{40}$ for the distance and the bound $\tfrac{73}{100}$ for the inner product, and it sums the numbers $\lceil 2^{80}/r \rceil$. The upper bound for $E(\tilde X)$ that results is $\factNrgUpperGap$ below $\tilde E$.
+
+\emph{(G2).} The certificate of (G2) is a bound by linear programming: a polynomial $h = \sum_{n \leq \factNrgLpDegree} h_n P_n$ in Legendre polynomials with $h_n \geq 0$ and $h \leq (2-2t)^{-1/2}$. Its bound for the energy of eleven points is $\factNrgLpBound$, so that the budget is $\tilde E$ minus this number, $\factNrgLpBudget$. A pair with $\tfrac{73}{100} \leq t \leq \tfrac{9997}{10000}$ has a slack $(2-2t)^{-1/2} - h(t)$ of at least $\tfrac{969}{10000}$, which exceeds the budget, and a pair with $t > \tfrac{9997}{10000}$ alone has an energy above $\tilde E$. The positivity of the Legendre kernels follows from the kernels of the circle: by the addition theorem $P_n(\langle x, y \rangle)$ is a sum of terms $w \, q(u) \, q(v) \, R_m(t - uv, (1-u^2)(1-v^2))$ with $w \geq 0$, where $u$, $v$ are the third coordinates of $x$, $y$, and every term is positive semidefinite by the fact of Section \ref{sec:n11gnormal}. The expansion of $h$ has $\factNrgLpTerms$ terms, and Lean proves the identity by \lean{ring}. The two sign conditions are instances of the check of the potential, with $\factNrgLpPieces$ pieces.
+
+\section{The local constants}\label{sec:n11glocal}
+
+Statement (G7) concerns a neighbourhood of the minimizer. Every part of it is a statement about an explicit polynomial.
+
+\emph{A polynomial below the energy.} Let $f(t) = (2 - 2t)^{-1/2}$, so that $E(x) = \sum_{i<j} f(t_{ij})$. Let $t_0, t \in (-1, 1)$, and let $u = (2 - 2t_0)^{1/2}$ and $s = (2 - 2t)^{1/2}$. Then
+\begin{equation}\label{eq:n11minorant}
+f(t) - \sum_{k=0}^{3} \frac{f^{(k)}(t_0)}{k!} \, (t - t_0)^k = \frac{(u - s)^4 \, (5 s^3 + 20 s^2 u + 29 s u^2 + 16 u^3)}{16 \, s \, u^7} \geq 0 .
+\end{equation}
+So $f$ lies above each of its Taylor polynomials of degree three. With $w = f(t_0)$ the coefficients of this polynomial are $f'(t_0) = w^3$, $\tfrac12 f''(t_0) = \tfrac32 w^5$ and $\tfrac16 f'''(t_0) = \tfrac52 w^7$. Let $p$ be a configuration of eleven points of $\R^3$ with $t^0_{ij} = \langle p_i, p_j \rangle < 1$, and let $y$ be a configuration of points of $\Sph^2$. Then
+$$
+E(y) \geq \sum_{i<j} \Bigl( f(t^0_{ij}) + \alpha_{ij} \Delta_{ij} + \beta_{ij} \Delta_{ij}^2 + \varsigma_{ij} \Delta_{ij}^3 \Bigr), \qquad \Delta_{ij} = \langle y_i, y_j \rangle - t^0_{ij} ,
+$$
+where $\alpha_{ij}, \beta_{ij}, \varsigma_{ij}$ are the three coefficients at $t^0_{ij}$. The right-hand side is a polynomial in $y$. No remainder of a Taylor expansion occurs, and no bound for a fourth derivative is needed.
+
+\emph{The forms.} A \emph{displacement} is a family $x = (x_1, \dots, x_{11})$ of vectors of $\R^3$, and $|x|^2 = \sum_i |x_i|^2$. It is \emph{tangential} if $\langle p_i, x_i \rangle = 0$ for all $i$. For a pair $i < j$ let
+$$
+L_{ij}(x) = \langle p_i, x_j \rangle + \langle x_i, p_j \rangle, \qquad
+\psi_{ij}(x) = \langle x_i, x_j \rangle - \tfrac12 \, t^0_{ij} \bigl( |x_i|^2 + |x_j|^2 \bigr),
+$$
+$$
+\rho_{ij}(x) = - \tfrac12 \bigl( |x_j|^2 \langle x_i, p_j \rangle + |x_i|^2 \langle p_i, x_j \rangle \bigr) .
+$$
+If the points of $p$ lie on the sphere and $y_i$ is the point of the sphere near $p_i$ for which $y_i - p_i$ has the tangential part $x_i$, then $L_{ij}$, $\psi_{ij}$ and $\rho_{ij}$ are the terms of the first, second and third order of $\Delta_{ij}$ in $x$. For numbers $a_{ij}, b_{ij}, c_{ij}$ let
+\begin{align*}
+Q(x) &= \sum_{i<j} a_{ij} \psi_{ij}(x) + b_{ij} L_{ij}(x)^2, \\
+C(x) &= \sum_{i<j} c_{ij} L_{ij}(x)^3 + 2 b_{ij} L_{ij}(x) \psi_{ij}(x) + a_{ij} \rho_{ij}(x) .
+\end{align*}
+With the coefficients $\alpha, \beta, \varsigma$ these are the terms of the second and third order of the polynomial. Finally let
+$$
+\pi(x) = \sum_i \langle p_i, x_i \rangle^2 + \Bigl| \sum_i p_i \times x_i \Bigr|^2 .
+$$
+The form $\pi$ vanishes for the tangential displacements with $\sum_i p_i \times x_i = 0$. This condition removes the rotations: a configuration near $p$ has a rotation whose displacement satisfies it. In Lean the second term of $\pi$ is written with inner products, by the identity of Lagrange.
+
+\begin{theorem}\label{thm:gseven}
+There are a configuration $p$ of eleven points of $\R^3$ whose coordinates are multiples of $2^{-60}$ and numbers $a_{ij} = a_{ji}$, $b_{ij} = b_{ji}$, $c_{ij} = c_{ji}$, multiples of $2^{-60}$, with the following properties, where $t^0_{ij} = \langle p_i, p_j \rangle$ and $w_{ij} = f(t^0_{ij})$.
+\begin{enumerate}
+    \item[(a)] $\bigl| |p_i|^2 - 1 \bigr| \leq 2^{-\factNrlNormBits}$ for all $i$, and $t^0_{ij} \leq \tfrac{17}{32}$ for all $i < j$.
+    \item[(b)] $|a_{ij} - w_{ij}^3| \leq \varepsilon$, $|b_{ij} - \tfrac32 w_{ij}^5| \leq \tfrac32 \varepsilon$ and $|c_{ij} - \tfrac52 w_{ij}^7| \leq \tfrac52 \varepsilon$ for all $i < j$, with $\varepsilon = \factNrlEncE \cdot 2^{-60}$.
+    \item[(c)] With $F_i = \sum_{j \neq i} a_{ij} p_j$ we have $\sum_i \bigl| F_i - \langle F_i, p_i \rangle \, p_i \bigr|^2 \leq \gamma^2$ for a number $\gamma < \factNrlGammaUp$.
+    \item[(d)] $\sum_{j \neq i} a_{ij} \leq \tfrac{\factNrlRowANum}{\factNrlRowADen}$, $\sum_{j \neq i} b_{ij} \leq \tfrac{\factNrlRowBNum}{\factNrlRowBDen}$ and $\sum_{j \neq i} c_{ij} \leq \tfrac{\factNrlRowCNum}{\factNrlRowCDen}$ for all $i$.
+    \item[(e)] $\tfrac{371}{8192} \, |x|^2 \leq Q(x) + 16384 \, \pi(x)$ for all displacements $x$.
+    \item[(f)] $\tfrac{3643}{1024} \, |x|^2 \leq \sum_{i<j} L_{ij}(x)^2 + 64 \, \pi(x)$ for all displacements $x$.
+    \item[(g)] $C(x)^2 \leq \bigl( \tfrac{113}{32} \bigr)^2 \, |x|^6$ for all tangential displacements $x$.
+    \item[(h)] $\sum_{a<b} \bigl( t^0_{ab} - \tau_{ab} \bigr)^2 \leq 2^{-\factNrlLinkBits}$ for the numbers $\tau_{ab}$ of Theorem \ref{thm:routeg}.
+\end{enumerate}
+\end{theorem}
+
+In Lean the properties (a) to (g) are the theorem \lean{N11L.g7}, a term of the structure \lean{N11.Local.G7}, and (h) is the pair of theorems \lean{N11L.link\_0} and \lean{N11L.link\_1}, one for the table of each of the two inner boxes; the proof uses the first. Lean reports the three standard axioms for them. In (b) the theorem is stated for every number $w > 0$ with $w^2 (2 - 2 t^0_{ij}) = 1$. Identity \eqref{eq:n11minorant} is not part of the theorem; it belongs to the analytic arguments.
+
+\emph{The reference configuration.} The configuration $p$ is not $\tilde X$. We refine $\tilde X$ by Newton's method for the energy on the product of the spheres, with $70$ digits, until the gradient has the norm $\factNrlRefGrad$, and we round the coordinates to multiples of $2^{-60}$. Hence $p$ does not lie on the sphere exactly, and it is not critical exactly: (a) and (c) bound the two defects. Statement (h) ties $p$ to Theorem \ref{thm:routeg}. The largest difference between a number $\tau_{ab}$ and $t^0_{ab}$ is $\factNrlLinkDiff$; the numbers $\tau_{ab}$ are multiples of $2^{-24}$.
+
+\emph{The use of the statements.} By (f) and (h) the confinement of Theorem \ref{thm:routeg} becomes a bound for the displacement of a minimizer. To first order this bound is $|x| \leq \factNrlRho / \sigma = \factNrlRadius$ with $\sigma^2 = \tfrac{3643}{1024}$, where $\factNrlRho$ is the sum of the roots of $\tfrac{1}{9000}$ and of the bound of (h). By (g) the term of the third order is at most $c_3 |x| \cdot |x|^2$ with $c_3 |x| \leq \factNrlCubAtRadius$ at this radius, and by (e) the term of the second order is at least $\kappa |x|^2$ with $\kappa = \factNrlKappaDec$; the difference of the two factors is $\factNrlNet$. The terms of higher order are bounded with the sums of (d), and the term of the first order with (c). This count is an estimate. Section \ref{sec:n11full} contains the argument, with the constants of its proof in Lean.
+
+\emph{The checks.} All data are integers at scales that are powers of two: the coordinates of $p$ and the coefficients at the scale $2^{60}$, the inner products at $2^{120}$. A signed integer is a pair of natural numbers with the value of their difference. For (e) the kernel computes the table of the form $Q + 16384 \, \pi - \kappa |x|^2$ on $\R^{33}$ from the data, entry by entry, and compares the upper triangle of its symmetric matrix with a matrix that the checker of positive definiteness of the library accepts with its witness. Its entries have $\factNrlHessBits$ bits; those of the matrix of (f) have $\factNrlRigBits$ bits. For (g) the kernel computes the table $T$ of six times the symmetric tensor of $C$, with the projections $1 - p_i p_i^{\mathsf T}$ in its linear forms, so that the statement for the tangential displacements needs no penalty. The table has $33^3$ entries. An entry vanishes unless its three indices belong to at most two points, so that $\factNrlTabNonzero$ entries remain. The square of a cubic form is at most $|x|^4$ times the quadratic form of the Gram matrix $W_{aa'} = \sum_{b,k} T_{kab} T_{ka'b}$ of its flattening, by the Cauchy--Schwarz inequality. The kernel computes $W$ from the stored table, and the checker accepts the matrix $36 \, c_3^2 \cdot 2^{1200} - W$, whose entries have $\factNrlCubBits$ bits. For (b) the kernel compares squares and computes no root: with $A = 2^{60} a_{ij}$ and $q = 2^{121} (1 - t^0_{ij})$ the number $2^{60} w_{ij}^3$ has the square $2^{480} / q^3$, and the tests are $(A - E)^2 q^3 \leq 2^{480} \leq (A + E)^2 q^3$; for $b$ and $c$ they use $q^5$ and $q^7$.
+
+\emph{Soundness.} The theorem \lean{N11.Local.g7\_of} derives the statement from the checks. The files of this proof and of the checks are those of the folder \file{LeanCode/N11/Local/}, with $\factNrlLibLines$ lines in $\factNrlLibFiles$ files; the two files of the checks import no file of Mathlib. The proof evaluates the tables as real forms, with an indicator of the diagonal in the place of the tests of the kernel. It uses the soundness of the checker of positive definiteness, and the lemma on the stored upper triangle of the folder \file{LeanCode/N14/}, as they are.
+
+\section{The analytic arguments}\label{sec:n11full}
+
+Theorems \ref{thm:routeg} and \ref{thm:gseven} contain what the proof takes from its certificates. In this section we give the analytic arguments that lead from them to Theorem \ref{thm:thomson11}. The configuration $X^{\circ}$ of Theorem \ref{thm:thomson11} is the reference configuration $p$ of Theorem \ref{thm:gseven} with its coordinates rounded to $15$ decimal places.
+
+\subsection{The analytic statements}
+
+Table \ref{tab:n11an} lists the analytic statements in the order of the proof, with the theorems of Lean that contain them (namespace \lean{N11.Analytic}, folder \file{LeanCode/N11/Analytic/}). We use the notation of Section \ref{sec:n11glocal}: $f(t) = (2-2t)^{-1/2}$, the reference configuration $p$ with $t^0_{ij} = \langle p_i, p_j \rangle$, the coefficients $a_{ij}, b_{ij}, c_{ij}$, the forms $L_{ij}$, $\psi_{ij}$, $Q$, $C$ and $\pi$, and the constants $\kappa = \tfrac{371}{8192}$, $\sigma^2 = \tfrac{3643}{1024}$ and $c_3 = \tfrac{113}{32}$ of Theorem \ref{thm:gseven}. Let $\nu$, $\varepsilon$ and $\gamma$ denote the bounds of (a), (b) and (c) of that theorem; the proof uses $\nu, \gamma \leq 10^{-17}$ and $\varepsilon \leq 10^{-18}$.
+
+\begin{table}[ht]
+\centering
+\small
+\begin{tabular}{@{}lp{0.50\textwidth}p{0.26\textwidth}p{0.08\textwidth}@{}}
+\toprule
+ & analytic statement & Lean & state \\
+\midrule
+(A1) & the energy of a configuration of the sphere is $\sum_{i<j} f(\langle x_i, x_j \rangle)$, and it does not change under orthogonal maps and relabellings & \lean{energy\_eq\_En}, \newline \lean{energy\_mulVec}, \newline \lean{energy\_comp\_perm} & proved \\
+(A2) & identity \eqref{eq:n11minorant}; $f$ lies below its tangent plus a quadratic; $f(t/m) = \sqrt{m} \, f(t + 1 - m)$ & \lean{taylor3}, \lean{upper2}, \newline \lean{fpot\_div} & proved \\
+(A3) & a minimizer exists & \lean{exists\_minimizer} & proved \\
+(A4) & a minimizer is critical & \lean{critical} & proved \\
+(A5) & the alignment: an orthogonal map $U$ for which $\sum_a (U y_a) \, p_a^{\mathsf T}$ is symmetric and positive semidefinite & \lean{exists\_align} & proved \\
+(A6) & an inequality of Procrustes type; the second term of $\pi$ vanishes for an aligned configuration & \lean{procrustes}, \newline \lean{penf\_of\_sym} & proved \\
+(A7) & rigidity: from the changes of the inner products to the displacement & \lean{rigid\_apriori}, \newline \lean{rigid\_refine} & proved \\
+(A8) & the lower bound for the polynomial below the energy near $p$ & \lean{expand\_lower} & proved \\
+(A9) & the gap of the energy; a minimizer lies within $10^{-11}$ of $p$ & \lean{energy\_gap}, \newline \lean{close\_of\_min} & proved \\
+(A10) & uniqueness: two minimizers near $p$ in the gauge coincide & \lean{unique} & proved \\
+(A11) & Theorem \ref{thm:routeg} for configurations in coordinates, with the sum over the pairs of positions & \lean{route\_confine} & proved \\
+(A12) & the assembly & \lean{thomson11\_of} \newline (Theorem \ref{thm:thomson11}) & proved \\
+\bottomrule
+\end{tabular}
+\medskip
+\caption{The analytic statements of the proof of Theorem \ref{thm:thomson11} and their state.}\label{tab:n11an}
+\end{table}
+
+\subsection{Existence and criticality}
+
+\emph{Existence.} Let $x$ be a configuration of distinct points of the sphere with $E(x) \leq \tilde E$. One term of the energy does not exceed the sum, hence $|x_i - x_j| \geq 1/\tilde E$ for all $i \neq j$. The configurations of the sphere with these distances form a compact subset of $\R^{33}$, on which the energy is continuous, and this set contains $\tilde X$ by Theorem \ref{thm:routeg}. A minimizer of the energy on this set is a minimizer among all configurations of distinct points of the sphere.
+
+\emph{Criticality.} Let $z$ be a minimizer, and let $F^z_i = \sum_{j \neq i} f(\langle z_i, z_j \rangle)^3 \, z_j$. Then $F^z_i$ is a multiple of $z_i$ for every $i$. We prove this without a derivative. For $t_0, t < 1$, with $u = (2 - 2t_0)^{1/2}$ and $s = (2 - 2t)^{1/2}$,
+$$
+f(t) - f(t_0) - f'(t_0) \, (t - t_0) = \frac{(u - s)^2 \, (2u + s)}{2 \, s \, u^3} .
+$$
+So $f(t) \leq f(t_0) + f'(t_0)(t - t_0) + K (t - t_0)^2$ with a constant $K$, as long as $u$ and $s$ are bounded from below. Let $u_i$ be the part of $F^z_i$ that is orthogonal to $z_i$. For $\theta > 0$ the vector
+$$
+z_i(\theta) = \frac{(1 - \theta^2 |u_i|^2) \, z_i - 2 \theta \, u_i}{1 + \theta^2 |u_i|^2}
+$$
+is a unit vector. When $z_i$ is replaced by $z_i(\theta)$, the energy changes by at most $\langle F^z_i, z_i(\theta) - z_i \rangle + K' |z_i(\theta) - z_i|^2$, and this number is negative for small $\theta$ unless $u_i = 0$.
+
+\subsection{The alignment}
+
+Let $y$ and $p$ be configurations of eleven points of $\R^3$. The orthogonal group of $\R^3$ is compact. Let $U$ maximize $\sum_a \langle p_a, U y_a \rangle$ on it, and let $S = \sum_a (U y_a) \, p_a^{\mathsf T}$. For an orthogonal matrix $G$ the value at $G U$ is the trace of $G S$. The comparison with the rotations of the three coordinate planes shows that $S$ is symmetric, and the comparison with the reflections $1 - 2 w w^{\mathsf T}$ shows that $\langle w, S w \rangle \geq 0$ for every unit vector $w$. The reflections are needed for the second property. We call $U y$ \emph{aligned} with $p$. The symmetry of $S$ is the condition $\sum_a p_a \times U y_a = 0$ of the gauge of Section \ref{sec:n11glocal}. No implicit function occurs: the rotation is a maximizer.
+
+\emph{An inequality of Procrustes type.} Let $y$ be aligned with $p$, and let $d = y - p$. Then
+\begin{equation}\label{eq:n11procrustes}
+\sum_{i,j} \bigl( \langle y_i, y_j \rangle - \langle p_i, p_j \rangle \bigr)^2 \geq \tfrac23 \sum_{i,j} \langle p_i, d_j \rangle^2 .
+\end{equation}
+Indeed, let $N = \sum_i d_i d_i^{\mathsf T}$, $T = \sum_i d_i p_i^{\mathsf T}$ and $R = \sum_i p_i p_i^{\mathsf T}$, so that $S = T + R$ and $T$ is symmetric. The left-hand side of \eqref{eq:n11procrustes} is the trace of $N^2 + 4 N T + 2 T^2 + 2 N R$, which equals
+$$
+\operatorname{tr} \bigl( N + \tfrac43 T \bigr)^2 + \tfrac29 \operatorname{tr} T^2 + \tfrac43 \operatorname{tr} N S + \tfrac23 \operatorname{tr} N R ,
+$$
+and $\operatorname{tr} N S = \sum_i \langle d_i, S d_i \rangle \geq 0$, $\operatorname{tr} N R = \sum_{i,j} \langle p_i, d_j \rangle^2$.
+
+\subsection{From the inner products to the displacement}
+
+Let $x$ be a minimizer. By Theorem \ref{thm:routeg} it has a numbering with $\sum_{a<b} ( \langle x_a, x_b \rangle - \tau_{ab} )^2 < \tfrac{1}{9000}$, where we write $x_a$ for the point with the number $a$. The points of $p$ do not lie on the sphere exactly. We therefore pass to the points $y_a = |p_a| \, U x_a$ on the spheres of the radii $|p_a|$, with an orthogonal matrix $U$. For $d = y - p$ this gives $2 \langle p_a, d_a \rangle + |d_a|^2 = 0$ without an error. Let $\Delta_{ab} = \langle y_a, y_b \rangle - t^0_{ab}$. By (a) and (h) of Theorem \ref{thm:gseven},
+$$
+\sum_{a<b} \Delta_{ab}^2 \leq \delta^2 = 1.1113 \cdot 10^{-4}
+$$
+for every $U$. We choose $U$ such that $y$ is aligned with $p$.
+
+\emph{The a priori bound.} For an aligned configuration the second term of $\pi(d)$ vanishes, so that $\pi(d) = \sum_i \langle p_i, d_i \rangle^2$. Statement (f) of Theorem \ref{thm:gseven} and \eqref{eq:n11procrustes} give
+$$
+\sigma^2 |d|^2 \leq \sum_{i<j} L_{ij}(d)^2 + 64 \, \pi(d) \leq 64 \sum_{i,j} \langle p_i, d_j \rangle^2 \leq 96 \sum_{i,j} \Delta_{ij}^2 = 192 \sum_{i<j} \Delta_{ij}^2 ,
+$$
+hence $|d|^2 \leq 0.006$. Statement (f) alone does not give this bound. It concerns the terms of the first order, and the passage from $\Delta_{ij}$ to $L_{ij}(d)$ needs a bound for $d$. A configuration with the inner products of $p$ can be far from $p$: a mirror image of $p$ is an example. The alignment, with the reflections, and \eqref{eq:n11procrustes} exclude this.
+
+\emph{The refinement.} We have $L_{ij}(d) = \Delta_{ij} - \langle d_i, d_j \rangle$, $\sum_{i<j} \langle d_i, d_j \rangle^2 \leq \tfrac12 |d|^4$ and $\pi(d) = \tfrac14 \sum_i |d_i|^4 \leq \tfrac14 |d|^4$. With $|d|^2 \leq X_0$ and a number $\theta > 0$, statement (f) gives
+$$
+\Bigl( \sigma^2 - \bigl( \tfrac12 (1 + \theta^{-1}) + 16 \bigr) X_0 \Bigr) \, |d|^2 \leq (1 + \theta) \, \delta^2 .
+$$
+Two steps, with $\theta = \tfrac{1}{16}$ and $\theta = \tfrac{1}{256}$, give $|d|^2 \leq 3.5 \cdot 10^{-5}$ and then $|d|^2 \leq 3.15 \cdot 10^{-5}$.
+
+\subsection{The lower bound and the place of a minimizer}
+
+Let $y$ be aligned with $p$, with $|y_i| = |p_i|$ and $|d|^2 \leq 3.15 \cdot 10^{-5}$. Let $v_i = d_i - |p_i|^{-2} \langle p_i, d_i \rangle \, p_i$ be the tangential part of $d$, and let $V = |v|$, so that $V \leq |d| \leq 0.005613$. The condition of the gauge holds for $v$, hence $\pi(v) = 0$. The change of an inner product is $\Delta_{ij} = L_{ij}(v) + \eta_{ij}$ with a term $\eta_{ij}$ of the second order. We insert this into the polynomial below the energy and sort by the order in $v$. The terms of the first order are $\sum_i \langle F_i, v_i \rangle \geq - \gamma V$ with the vectors $F_i$ of (c). The terms of the second order are $Q(v) \geq \kappa V^2$ by (e), since $\pi(v) = 0$. The terms of the third order are $C(v) \geq - c_3 V^3$ by (g). All other terms are bounded for each pair by $|v_i|^2$ and $|v_j|^2$ and are summed with (d); one of them is nonnegative and is omitted. This gives
+$$
+\sum_{i<j} \bigl( a_{ij} \Delta_{ij} + b_{ij} \Delta_{ij}^2 + c_{ij} \Delta_{ij}^3 \bigr) \geq - \gamma V + (\kappa - 3 \nu) \, V^2 - c_3 V^3 - 150 \, V^4 .
+$$
+For $V \leq 0.005613$ we have $\kappa - c_3 V - 150 V^2 - 3\nu \geq 0.0207$. Statement (e) is applied to $v$ and not to $d$: the term $16384 \, \pi(d)$ is of the order $4096 \, |d|^4$, which the quadratic term does not absorb at this radius. With the box $B_{3/20}$ and the factor $\tfrac{3}{1000}$ of (G6) the bound for $V$ is larger, and the terms of the third and fourth order exceed $\kappa V^2$ there; the proof therefore uses the box $B_{1/10}$.
+
+\emph{The gap of the energy.} Let $z$ be a configuration of distinct points of the sphere, let $y_i = |p_i| z_i$, and let $\hat p_i = p_i / |p_i|$. With $m = |p_i| \, |p_j|$ we have $\langle z_i, z_j \rangle = \langle y_i, y_j \rangle / m$ and $f(t/m) = \sqrt m \, f(t + 1 - m)$. Identity \eqref{eq:n11minorant} at the point $t^0_{ij} + 1 - m$ gives
+$$
+f(\langle z_i, z_j \rangle) - f(\langle \hat p_i, \hat p_j \rangle) \geq \sqrt m \, \bigl( w^3 \Delta_{ij} + \tfrac32 w^5 \Delta_{ij}^2 + \tfrac52 w^7 \Delta_{ij}^3 \bigr), \qquad w = f(t^0_{ij} + 1 - m) .
+$$
+The three coefficients differ from $a_{ij}$, $b_{ij}$, $c_{ij}$ by multiples of $\nu$ and $\varepsilon$. No error is a constant, since the base of the comparison is the configuration $\hat p$ itself. If $y$ is aligned with $p$ and $|y - p|^2 \leq 3.15 \cdot 10^{-5}$, we obtain
+$$
+E(z) - E(\hat p) \geq \tfrac{1}{50} V^2 - 10^{-13} \, V .
+$$
+A minimizer $z$ satisfies $E(z) \leq E(\hat p)$. Hence $V \leq 5 \cdot 10^{-12}$, and $|z_i - p_i| \leq 10^{-11}$ for every $i$.
+
+\subsection{Uniqueness and the end of the proof}
+
+Let $Z$ and $Z'$ be configurations of the sphere with $|Z_i - p_i|, |Z'_i - p_i| \leq 10^{-11}$ for all $i$ such that $(|p_i| Z_i)$ and $(|p_i| Z'_i)$ satisfy the condition of the gauge. Let $Z$ be critical in the sense of (A4), and let $E(Z') \leq E(Z)$. Then $Z' = Z$. For the proof let $e = Z' - Z$. We use \eqref{eq:n11minorant} with the base $Z$. There the coefficients are exact: $\alpha_{ij} = w^3$, $\beta_{ij} = \tfrac32 w^5$ and $\varsigma_{ij} = \tfrac52 w^7$ with $w = f(\langle Z_i, Z_j \rangle)$. The change of an inner product is $L^Z_{ij}(e) + \langle e_i, e_j \rangle$, with the linear form of the base $Z$. Since $Z$ is critical and $2 \langle Z_i, e_i \rangle + |e_i|^2 = 0$, the terms of the first order are exactly $\sum_{i<j} \alpha_{ij} \psi^Z_{ij}(e)$. The coefficients and the forms at $Z$ differ from those at $p$ by multiples of $10^{-11}$, and we obtain
+$$
+0 \geq E(Z') - E(Z) \geq Q(e) - 3.1 \cdot 10^{-8} \, |e|^2 .
+$$
+The condition of the gauge holds for the scaled configurations and not for $e$; this and $\langle p_i, e_i \rangle = -\tfrac12 |e_i|^2 + \langle p_i - Z_i, e_i \rangle$ give $\pi(e) \leq 5 \cdot 10^{-22} \, |e|^2$. By (e), $\kappa |e|^2 \leq Q(e) + 16384 \, \pi(e)$. Hence $e = 0$.
+
+\emph{The end of the proof.} Let $x$ be a minimizer, which exists by (A3). Its numbering and its alignment yield a configuration $Z$ of the sphere that arises from $x$ by a relabelling and an orthogonal map, with $|Z_i - p_i| \leq 10^{-11}$ and with the condition of the gauge; it is a minimizer and hence critical. We set $X^* = Z$. Every coordinate of $p$ differs from that of $X^{\circ}$ by at most $5 \cdot 10^{-16}$, which gives (a). We have $E(X^*) \leq E(\tilde X) \leq \tilde E$ by Theorem \ref{thm:routeg}, and $E(X^*) > \tilde E - 10^{-6}$ by \eqref{eq:n11pen}, which gives (b). If $x'$ is a configuration of distinct points of the sphere with $E(x') = E(X^*)$, then $x'$ is a minimizer, the same steps yield a configuration $Z'$, and $Z' = Z$ by the uniqueness. So $x'$ arises from $X^*$ by an orthogonal map and a relabelling. Conversely, a configuration that arises from $X^*$ in this way has the energy $E(X^*)$ by (A1). This gives (c).
+
+\section{The proof in Lean}\label{sec:lean}
+
+The proof of Theorem \ref{thm:thomson11} in Lean has three parts. The library of checkers contains the checkers and their theorems of soundness (\file{LeanCode/CAP/}, \file{LeanCode/N11/ParallelResearch1/Circ/}, \file{LeanCode/N11/Local/}). The generated modules contain the data of the certificates and end with Theorems \ref{thm:routeg} and \ref{thm:gseven} (\file{Certificates/}). The $\factNthAnaFiles$ files of the analytic part (\file{LeanCode/N11/Analytic/}), with \factNthAnaLines{} lines, prove \lean{N11.thomson11\_of}. This theorem has five hypotheses: the structure of Theorem \ref{thm:gseven} with bounds for its constants, statement (h), Theorem \ref{thm:routeg} together with \eqref{eq:n11pen}, a configuration of distinct points of the sphere with energy at most $\tilde E$, and the distance $5 \cdot 10^{-16}$ between $p$ and $X^{\circ}$. The module \file{Certificates/Theorem/T6A.lean} applies it to the theorems of the generated modules. It proves the bounds for the constants and the $33$ comparisons of coordinates by $\factNthStmtKernelChecks$ evaluations of the kernel on the data of the generated modules; the largest difference between a coordinate of $p$ and of $X^{\circ}$ is $\factNthCoordDiff$. It tests that \lean{N11.T6A.thomson11} depends on the axioms \lean{propext}, \lean{Classical.choice} and \lean{Quot.sound} only. No step uses \lean{native\_decide} or \lean{sorry}. Finally \file{Showcase_WithProofs.lean} passes to points of the Euclidean space and to linear isometries, and it adds the converse of the case of equality, which is (A1).
+
+\end{document}

@@ -1,0 +1,48 @@
+name = "Thomson11"
+version = "0.1.0"
+defaultTargets = ["N11", "Certificates", "Showcase", "Showcase_WithProofs"]
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "db584cd6d46c92f209a44c0f1c829460d327499d"
+
+# The statement of the main theorem, with Mathlib as its only import.
+[[lean_lib]]
+name = "Showcase"
+
+# The same statement with its proof, which imports the libraries below.
+[[lean_lib]]
+name = "Showcase_WithProofs"
+
+# The reader of large hexadecimal numerals (`hex% "…"`), an elaborator that is compiled to native code.
+# It only produces `Nat` literals; the kernel checks every statement about them.
+[[lean_lib]]
+name = "CAPNumeral"
+srcDir = "LeanCode"
+precompileModules = true
+
+# Checkers for the Lean kernel and their soundness theorems (general library).
+[[lean_lib]]
+name = "CAP"
+srcDir = "LeanCode"
+globs = ["CAP.+"]
+
+# Three kernel files that are shared with the verification for 14 points.
+[[lean_lib]]
+name = "N14"
+srcDir = "LeanCode"
+globs = ["N14.+"]
+
+# The theorem for 11 points: statement, checkers of the route, local constants, analytic part.
+[[lean_lib]]
+name = "N11"
+srcDir = "LeanCode"
+globs = ["N11.+"]
+
+# The certificates: generated modules with exact data, checked by the kernel (`decide +kernel`).
+# Every Lean file below Certificates/ is a module of this library. A module is compiled with one thread.
+[[lean_lib]]
+name = "Certificates"
+globs = ["Certificates.+"]
+weakLeanArgs = ["-j1"]

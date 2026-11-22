@@ -1,0 +1,21 @@
+{
+  "challenge_module": "Showcase",
+  "solution_module": "Showcase_WithProofs",
+  "theorem_names": [
+    "Thomson11.thomson_11_points"
+  ],
+  "definition_names": [
+    "Thomson11.Point",
+    "Thomson11.IsConfiguration",
+    "Thomson11.E",
+    "Thomson11.Congruent",
+    "Thomson11.IsUniqueMinimizer",
+    "Thomson11.X₀"
+  ],
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "enable_nanoda": true
+}

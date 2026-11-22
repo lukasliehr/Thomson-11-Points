@@ -1,0 +1,22 @@
+# Lean build output and downloaded dependencies
+.lake/
+
+# LaTeX build output
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+
+# Local files
+__pycache__/
+.DS_Store
+
+# Data modules of the certificates, unpacked from the .lean.xz files by Certificates/unpack.py.
+# (The statement modules in these folders are tracked.)
+/Certificates/**/*.lean
+/Certificates/**/*.lean.part
