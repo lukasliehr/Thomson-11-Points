@@ -15,7 +15,8 @@ For a configuration $Y=(y_1,\ldots,y_{11})$ of distinct points on $S^2$ let
 E(Y)=\sum_{1\le i\lt j\le 11}\frac{1}{\lVert y_i-y_j\rVert}.
 ```
 
-Let $X_0$ be the following table of eleven points of $\mathbb{R}^3$, one point in each row:
+Let $X_0=(x^0_1,\ldots,x^0_{11})$ be the following eleven points of $\mathbb{R}^3$: row $i$ of the
+table contains the three coordinates $(x^0_{i,1},x^0_{i,2},x^0_{i,3})$ of the point $x^0_i$.
 
 ```math
 X_0=\left(\begin{array}{rrr}
@@ -35,14 +36,14 @@ X_0=\left(\begin{array}{rrr}
 
 ## Formalized theorem
 
-**Theorem.** There exists a configuration $X$ of 11 distinct points on $S^2$ such that the
-following holds:
+**Theorem.** There exists a configuration $X=(x_1,\ldots,x_{11})$ of 11 distinct points on $S^2$
+such that the following holds:
 
 1. Every configuration $Y$ of 11 distinct points on $S^2$ satisfies $E(Y)\ge E(X)$, with equality
    if and only if $Y$ arises from $X$ by an orthogonal transformation and a relabelling of the
    points.
-2. Every coordinate of every point of $X$ differs from the corresponding entry of $X_0$ by at
-   most $10^{-10}$.
+2. If $x_{i,k}$ denotes the $k$-th coordinate of the point $x_i$, then
+   $|x_{i,k}-x^0_{i,k}|\le 10^{-10}$ for all $i=1,\ldots,11$ and $k=1,2,3$.
 3. The minimal energy satisfies $40.59644951\lt E(X)\le 40.59645051$.
 
 `thomson_11_points` is the Lean formulation of this theorem. The following declaration is from
